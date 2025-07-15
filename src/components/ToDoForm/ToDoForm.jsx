@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './ToDoForm.module.css';
+import { PRIORITY_DEFAULT } from '../../constants/priorities';
 
 export function ToDoForm({ onCreate }) {
 
@@ -15,7 +16,7 @@ export function ToDoForm({ onCreate }) {
             name: elements.name?.value ?? "",
             description: elements.description?.value ?? "",
             deadline: elements.deadline?.value ?? "",
-            priority: elements.priority?.value ?? "none"
+            priority: elements.priority?.value ?? PRIORITY_DEFAULT
             });
 
     }
@@ -58,11 +59,12 @@ export function ToDoForm({ onCreate }) {
 
                                 <div className={styles.FormField}>
                                     <label htmlFor="priority">Priority</label>
-                                    <select defaultValue="none" id="priority" name="priority">
-                                        <option value="none">None</option>
-                                        <option value="low">Low</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="high">High</option>
+                                    <select defaultValue={PRIORITY_DEFAULT} id="priority" name="priority">
+                                        {Object.entries(PRIORITIES).map(([key, { label }]) => (
+                                            <option key={key} value={key}>
+                                                {label}
+                                            </option> 
+                                        ))}
                                     </select>
                                 </div>
                             </div>
