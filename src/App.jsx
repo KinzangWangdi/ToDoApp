@@ -1,28 +1,68 @@
 import React, { useState } from 'react'
-import {ToDoForm} from './components/ToDoForm/ToDoForm.jsx'
+import { ToDoForm } from './components/ToDoForm/ToDoForm.jsx'
+import { ToDoList } from './components/ToDoList/ToDoList.jsx'
 import styles from './App.module.css'
+
+const TODOS_DEFAULT = [
+  {
+    id: "1",
+    name: "Buy an Ice Cream",
+    description: "The white one with chocolate",
+    deadline: "2025-02-09",
+    priority: "low",
+    completed: false,
+  },
+  {
+    id: "2",
+    name: "Sell old MacBook Pro 2025",
+    description: "Try to sell it on OLX",
+    deadline: "2025-02-28",
+    priority: "high",
+    completed: false,
+  },
+  {
+    id: "3",
+    name: "Charge Powerbank",
+    description: "For the next travelling",
+    deadline: "2025-02-15",
+    priority: "medium",
+    completed: true,
+  },
+  {
+    id: "4",
+    name: "Test Todo onlye with a name",
+    description: "",
+    deadline: "",
+    priority: "none",
+    completed: false,
+  },
+];
+
 
 function App() {
 
-const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(TODOS_DEFAULT);
 
-function handleCreate(newTodo) {
+  function handleCreate(newTodo) {
     setTodos((prevTodos) => [
-      ...prevTodos, 
+      ...prevTodos,
       { id: `${prevTodos.length + 1}`, ...newTodo },
-  ]);
-}
+    ]);
+  }
 
- return (
+  return (
     <div className={styles.App}>
       <header className={styles.Header}>
-        <img className={styles.Logo} src='/to-do.png'/>
+        <img className={styles.Logo} src='/to-do.png' />
         <h2 className={styles.Title}>To-Do App</h2>
       </header>
 
       <div className={styles.AppContainer}>
-        <ToDoForm onCreate={handleCreate}/>
-        {JSON.stringify(todos)}
+        <ToDoForm onCreate={handleCreate} />
+        <ToDoList todos={todos} />
+        {/* <pre>{JSON.stringify(todos, null, 2)}</pre> */}
+
+      
       </div>
     </div>
   )
