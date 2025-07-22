@@ -42,3 +42,9 @@
 .Title button {
  align-self: center;
 }
+
+.Error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}

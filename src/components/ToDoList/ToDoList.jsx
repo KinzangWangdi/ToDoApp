@@ -9,7 +9,7 @@ export function ToDoList({ todos, onUpdate, onDelete }) {
             {todos.length === 0 && <p>No To-Do's yet</p>}
 
             <ul className={styles.TodoList}>
-                {todos.map((todo) => (
+                {Array.isArray(todos) && todos.map((todo) => (
                     <ToDoListItem key={todo.id} todo={todo} onUpdate={onUpdate} onDelete={onDelete} />
                 ))}
             </ul>

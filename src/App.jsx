@@ -1,97 +1,37 @@
-import {  useState } from 'react'
-import { ToDoForm } from './components/ToDoForm/ToDoForm.jsx'
-import { ToDoList } from './components/ToDoList/ToDoList.jsx'
-import { TodoFilters } from './components/ToDoFilters/ToDoFilters.jsx'
-import styles from './App.module.css'
-import { COMPLETED_FILTERS } from './constants/filters.jsx'
-
-const TODOS_DEFAULT = [
-  {
-    id: "1",
-    name: "Buy an Ice Cream",
-    description: "The white one with chocolate",
-    deadline: "2025-02-09",
-    priority: "low",
-    completed: false,
-  },
-  {
-    id: "2",
-    name: "Sell old MacBook Pro 2025",
-    description: "Try to sell it on OLX",
-    deadline: "2025-02-28",
-    priority: "high",
-    completed: false,
-  },
-  {
-    id: "3",
-    name: "Charge Powerbank",
-    description: "For the next travelling",
-    deadline: "2025-02-15",
-    priority: "medium",
-    completed: true,
-  },
-  {
-    id: "4",
-    name: "Test Todo onlye with a name",
-    description: "",
-    deadline: "",
-    priority: "none",
-    completed: false,
-  },
-];
-
+import { ToDoForm } from "./components/ToDoForm/ToDoForm";
+import {ToDoList} from "./components/ToDoList/ToDoList";
+import { TodoFilters } from "./components/ToDoFilters/TodoFilters";
+import { Alert } from "./components/Alerts/Alert";
+import { useTodos } from "./hooks/todo";
+import { Loader } from "./components/Loader/Loader";
+import styles from "./App.module.css";
 
 function App() {
-
-  const [todos, setTodos] = useState(TODOS_DEFAULT);
-  const [filter, setFilter] = useState({});
-
-  
-
-  function handleCreate(newTodo) {
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      { id: `${prevTodos.length + 1}`, ...newTodo },
-    ]);
-  }
-
-  function handleUpdate(id, newTodo) {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => (todo.id === id ? newTodo : todo))
-    );
-  }
-
-  function handleDelete(id) {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  }
-
-  function filterTodos(todo) {
-    const { completed, priority } = filter;
-
-    return (
-      (completed === "" || todo.completed === completed) &&
-      (priority === "" || todo.priority === priority)
-    )
-  }
+  const todos = useTodos();
 
   return (
     <div className={styles.App}>
+    
       <header className={styles.Header}>
-        <img className={styles.Logo} src='/to-do.png' />
+        <img className={styles.Logo} src="/to-do.png" />
         <h2 className={styles.Title}>To-Do App</h2>
       </header>
 
       <div className={styles.AppContainer}>
-        <ToDoForm onCreate={handleCreate} />
-        <TodoFilters onFilter={setFilter} />
-        <ToDoList todos={todos.filter(filterTodos)} onUpdate={handleUpdate} onDelete={handleDelete}/>
-        
-        
-
-      
+        {todos.loading && <Loader />}
+        {!!todos.error.message && (
+          <Alert onClear={todos.error.clear}>{todos.error.message}</Alert>
+        )}
+        <ToDoForm onCreate={todos.create} />
+        <TodoFilters onFilter={todos.filter} />
+        <ToDoList
+          todos={todos.data}
+          onUpdate={todos.update}
+          onDelete={todos.delete}
+        />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
